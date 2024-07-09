@@ -1,21 +1,39 @@
 pipeline {
-    agent none
-   stages {     
-    stage('Maven Install') {
-      agent {         
-       docker {          
-         image 'maven:3.5.0'         
-     }       
-  }       
-  steps {
-       sh 'mvn clean install '
-       }
-     }
-  stage('Docker Build') {
-      agent any
-      steps {
-        sh 'docker build -t cloudinstitution1/spring-petclinic:latest .'
-      }
+    agent any
+
+    tools {
+        maven 'Maven_3.6.3' // Adjust this to the Maven version installed on your Jenkins server
+        jdk 'JDK_11' // Adjust this to the JDK version installed on your Jenkins server
     }
-   }
- }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the code from the Git repository
+                git branch: 'main', url: 'https://github.com/cloudinstitution/spring-petclinic.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                // Install Maven dependencies
+                sh 'mvn clean install'
+            }
+        }
+    }
+
+    post {
+        always {
+            // Perform cleanup actions, such as archiving artifacts if needed
+            archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+        }
+
+        success {
+            echo 'Maven dependencies installed successfully!'
+        }
+
+        failure {
+            echo 'Maven dependencies installation failed!'
+        }
+    }
+}
