@@ -2,20 +2,20 @@ pipeline {
     agent any
 
     stages {
-        stage('Install Maven') {
-            steps {
-                // Install Maven using apt-get
-                sh 'sudo apt-get update -y'
-                sh 'sudo apt-get install -y maven'
-            }
-        }
+        // stage('Install Maven') {
+        //     steps {
+        //         // Install Maven using apt-get
+        //         sh 'sudo apt-get update -y'
+        //         sh 'sudo apt-get install -y maven'
+        //     }
+        // }
 
-        stage('Verify Maven Installation') {
-            steps {
-                // Verify Maven installation
-                sh 'mvn -version'
-            }
-        }
+        // stage('Verify Maven Installation') {
+        //     steps {
+        //         // Verify Maven installation
+        //         sh 'mvn -version'
+        //     }
+        // }
 
         stage('Build') {
             steps {
