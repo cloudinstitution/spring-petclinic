@@ -1,21 +1,27 @@
 pipeline {
-    agent none
-   stages {     
-    stage('Maven Install') {
-      agent {         
-       docker {          
-         image 'maven:3.5.0'         
-     }       
-  }       
-  steps {
-       sh 'mvn clean install'
-       }
-     }
-  stage('Docker Build') {
-      agent any
-      steps {
-        sh 'docker build -t cloudinstitution1/spring-petclinic:latest .'
-      }
+    agent any
+
+    stages {
+        stage('Install Maven') {
+            steps {
+                // Install Maven using apt-get
+                sh 'sudo apt-get update -y'
+                sh 'sudo apt-get install -y maven'
+            }
+        }
+
+        stage('Verify Maven Installation') {
+            steps {
+                // Verify Maven installation
+                sh 'mvn -version'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Your build steps go here
+                echo 'Building...'
+            }
+        }
     }
-   }
- }
+}
